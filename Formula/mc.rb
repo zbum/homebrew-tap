@@ -1,7 +1,6 @@
 class Mc < Formula
   desc "SSH connection manager"
   homepage "https://github.com/zbum/mc"
-  version "1.3.0"
   license "MIT"
 
   on_macos do
