@@ -1,46 +1,39 @@
 class Mc < Formula
-  desc "MC - SSH Connection Manager"
+  desc "SSH connection manager"
   homepage "https://github.com/zbum/mc"
-  version "1.2.0"
-  license "MIT"  # 실제 라이선스로 변경
+  version "1.3.0"
+  license "MIT"
 
   on_macos do
     if Hardware::CPU.arm?
-      url "https://github.com/zbum/mc/releases/download/v1.2.0/mc-v1.2.0-darwin-arm64"
-      sha256 "dd273d21c5525edebade86c7bbf1d487481db82e1514e04058f373f2888644ec"
+      url "https://github.com/zbum/mc/releases/download/v1.3.0/mc-v1.3.0-darwin-arm64"
+      sha256 "384ced1300435156387827dab16e19859539f9c545f2a59e42e2c065ddd36d06"
 
-      def install
-        bin.install "mc-v1.2.0-darwin-arm64" => "mc"
-      end
     elsif Hardware::CPU.intel?
-      url "https://github.com/zbum/mc/releases/download/v1.2.0/mc-v1.2.0-darwin-amd64"
-      sha256 "5d654e4388e1989677a6201b11cd917dfc8a757f3e303f406b97601a2992c53d"
-
-      def install
-        bin.install "mc-v1.2.0-darwin-amd64" => "mc"
-      end
+      url "https://github.com/zbum/mc/releases/download/v1.3.0/mc-v1.3.0-darwin-amd64"
+      sha256 "645e1c377664e63e4bfa137be3eb9f4f39ba2cea3ff69fa55638cdfb7ae56b09"
     end
   end
 
   on_linux do
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/zbum/mc/releases/download/v1.2.0/mc-v1.2.0-linux-arm64"
-      sha256 "132e9dfd9d5c5bcbd942f0249ac37e84f852a6e97251452699dbac464b6668e8"
+      url "https://github.com/zbum/mc/releases/download/v1.3.0/mc-v1.3.0-linux-arm64"
+      sha256 "d4781ea139d38da4d1c1b6df51d7d1007cc1e008c902718ee0c750bcb98c3cd1"
 
-      def install
-        bin.install "mc-v1.2.0-linux-arm64" => "mc"
-      end
     elsif Hardware::CPU.intel?
-      url "https://github.com/zbum/mc/releases/download/v1.2.0/mc-v1.2.0-mc-linux-amd64"
-      sha256 "ebe4253b9d1f4f7ac550eb8eb66df84b2015043ff398d9e4fe5246770d41d3eb"
-
-      def install
-        bin.install "mc-v1.2.0-linux-amd64" => "mc"
-      end
+      url "https://github.com/zbum/mc/releases/download/v1.3.0/mc-v1.3.0-linux-amd64"
+      sha256 "498d689d1db8520d147608dd2faa11dabf8989fbca9e62076eae816965f6e331"
     end
   end
 
+  def install
+    bin.install Dir["mc-*"].first => "mc"
+  end
+
   test do
-    system "#{bin}/mc", "--version"
+    config = testpath/"ssh_config"
+    config.write ""
+    output = shell_output("MC_SSH_CONFIG=#{config} #{bin}/mc 2>&1", 1)
+    assert_match "No SSH hosts found in config", output
   end
 end
